@@ -1,0 +1,246 @@
+**/__pycache__
+**/*.pyc
+**/*.log
+**/*.png
+**/*.jpg
+**/*.mp4
+HPSv2
+**/HPSv2
+assets/
+
+# VADER-ModelScope
+VADER-ModelScope/outputs/
+VADER-ModelScope/media_vis/
+VADER-ModelScope/pretrained_models/
+VADER-ModelScope/wandb/
+VADER-ModelScope/data/
+VADER-ModelScope/__pycache__/
+VADER-ModelScope/media_vis/
+VADER-ModelScope/shan-myout/
+VADER-ModelScope/weights/
+VADER-ModelScope/vader_baselines_ckpts/
+VADER-ModelScope/checkpoint/
+VADER-ModelScope/kinetics_middle_img/
+VADER-ModelScope/config/v2
+
+# VADER-VideoCrafter
+VADER-VideoCrafter/.DS_Store
+VADER-VideoCrafter/.vscode
+VADER-VideoCrafter/__pycache__
+VADER-VideoCrafter/*.egg-info
+VADER-VideoCrafter/checkpoints
+VADER-VideoCrafter/results
+VADER-VideoCrafter/wandb
+VADER-VideoCrafter/project_dir
+VADER-VideoCrafter/scripts/evaluation/__pycache__
+VADER-VideoCrafter/scripts/lvdm/__pycache__
+
+
+# Byte-compiled / optimized / DLL files
+VADER-Open-Sora/__pycache__/
+VADER-Open-Sora/scripts/__pycache__
+VADER-Open-Sora/opensora/__pycache__
+VADER-Open-Sora/*.py[cod]
+VADER-Open-Sora/*$py.class
+
+# C extensions
+VADER-Open-Sora/*.so
+
+# Distribution / packaging
+VADER-Open-Sora/.Python
+VADER-Open-Sora/build/
+VADER-Open-Sora/develop-eggs/
+VADER-Open-Sora/dist/
+VADER-Open-Sora/downloads/
+VADER-Open-Sora/eggs/
+VADER-Open-Sora/.eggs/
+VADER-Open-Sora/lib/
+VADER-Open-Sora/lib64/
+VADER-Open-Sora/parts/
+VADER-Open-Sora/sdist/
+VADER-Open-Sora/var/
+VADER-Open-Sora/wheels/
+VADER-Open-Sora/share/python-wheels/
+VADER-Open-Sora/*.egg-info/
+VADER-Open-Sora/.installed.cfg
+VADER-Open-Sora/*.egg
+VADER-Open-Sora/MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+VADER-Open-Sora/*.manifest
+VADER-Open-Sora/*.spec
+
+# Installer logs
+VADER-Open-Sora/pip-log.txt
+VADER-Open-Sora/pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+VADER-Open-Sora/htmlcov/
+VADER-Open-Sora/.tox/
+VADER-Open-Sora/.nox/
+VADER-Open-Sora/.coverage
+VADER-Open-Sora/.coverage.*
+VADER-Open-Sora/.cache
+VADER-Open-Sora/nosetests.xml
+VADER-Open-Sora/coverage.xml
+VADER-Open-Sora/*.cover
+VADER-Open-Sora/*.py,cover
+VADER-Open-Sora/.hypothesis/
+VADER-Open-Sora/.pytest_cache/
+VADER-Open-Sora/cover/
+
+# Translations
+VADER-Open-Sora/*.mo
+VADER-Open-Sora/*.pot
+
+# Django stuff:
+VADER-Open-Sora/*.log
+VADER-Open-Sora/local_settings.py
+VADER-Open-Sora/db.sqlite3
+VADER-Open-Sora/db.sqlite3-journal
+
+# Flask stuff:
+VADER-Open-Sora/instance/
+VADER-Open-Sora/.webassets-cache
+
+# Scrapy stuff:
+VADER-Open-Sora/.scrapy
+
+# Sphinx documentation
+VADER-Open-Sora/docs/_build/
+
+# PyBuilder
+VADER-Open-Sora/.pybuilder/
+VADER-Open-Sora/target/
+
+# Jupyter Notebook
+VADER-Open-Sora/.ipynb_checkpoints
+
+# IPython
+VADER-Open-Sora/profile_default/
+VADER-Open-Sora/ipython_config.py
+
+# pyenv
+#   For a library or package, you might want to ignore these files since the code is
+#   intended to run in multiple environments; otherwise, check them in:
+# .python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# poetry
+#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+#   This is especially recommended for binary packages to ensure reproducibility, and is more
+#   commonly ignored for libraries.
+#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+#poetry.lock
+
+# pdm
+#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+#pdm.lock
+#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
+#   in version control.
+#   https://pdm.fming.dev/#use-with-ide
+VADER-Open-Sora/.pdm.toml
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+VADER-Open-Sora/__pypackages__/
+
+# Celery stuff
+VADER-Open-Sora/celerybeat-schedule
+VADER-Open-Sora/celerybeat.pid
+
+# SageMath parsed files
+VADER-Open-Sora/*.sage.py
+
+# Environments
+VADER-Open-Sora/.env
+VADER-Open-Sora/.venv
+VADER-Open-Sora/env/
+VADER-Open-Sora/venv/
+VADER-Open-Sora/ENV/
+VADER-Open-Sora/env.bak/
+VADER-Open-Sora/venv.bak/
+
+
+# Spyder project settings
+VADER-Open-Sora/.spyderproject
+VADER-Open-Sora/.spyproject
+
+# Rope project settings
+VADER-Open-Sora/.ropeproject
+
+# mkdocs documentation
+VADER-Open-Sora/site
+
+# mypy
+VADER-Open-Sora/.mypy_cache/
+VADER-Open-Sora/.dmypy.json
+VADER-Open-Sora/dmypy.json
+
+# Pyre type checker
+VADER-Open-Sora/.pyre/
+
+# pytype static type analyzer
+VADER-Open-Sora/.pytype/
+
+# Cython debug symbols
+VADER-Open-Sora/cython_debug/
+
+# PyCharm
+#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+#  and can be added to the global gitignore or merged into this file.  For a more nuclear
+#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+VADER-Open-Sora/.idea/
+VADER-Open-Sora/.vscode/
+
+# macos
+VADER-Open-Sora/*.DS_Store
+
+# misc files
+VADER-Open-Sora/data/
+VADER-Open-Sora/dataset/
+VADER-Open-Sora/runs/
+VADER-Open-Sora/checkpoints/
+VADER-Open-Sora/outputs/
+VADER-Open-Sora/outputs
+VADER-Open-Sora/samples/
+VADER-Open-Sora/samples
+VADER-Open-Sora/logs/
+VADER-Open-Sora/pretrained_models/
+VADER-Open-Sora/pretrained_models
+VADER-Open-Sora/evaluation_results/
+VADER-Open-Sora/cache/
+VADER-Open-Sora/*.swp
+
+# Secret files
+VADER-Open-Sora/hostfile
+VADER-Open-Sora/run.sh
+VADER-Open-Sora/gradio_cached_examples/
+VADER-Open-Sora/wandb/
+
+# vae weights
+VADER-Open-Sora/eval/vae/flolpips/weights/
+
+# npm
+VADER-Open-Sora/node_modules/
+VADER-Open-Sora/package-lock.json
+VADER-Open-Sora/package.json
+
+# PLLaVA
+VADER-Open-Sora/tools/caption/pllava_dir/PLLaVA/
+
+# vbench
+VADER-Open-Sora/vbench
+VADER-Open-Sora/!eval/vbench
+VADER-Open-Sora/vbench2_beta_i2v
+
+# Video files
+VADER-Open-Sora/project_dir

@@ -1,0 +1,144 @@
+# adapted from Open-Sora: https://github.com/hpcaitech/Open-Sora
+import torch
+from tqdm import tqdm
+import random
+import torch.utils.checkpoint as checkpoint
+
+from opensora.registry import SCHEDULERS
+
+from .rectified_flow import RFlowScheduler, timestep_transform
+
+
+
+
+@SCHEDULERS.register_module("horizon_rflow") #TODO:change the name, already changed
+class HRFLOW: #TODO:change the class name, already changed
+    def __init__(
+        self,
+        num_sampling_steps=10,
+        num_timesteps=1000, # same as the training num_timesteps 
+        cfg_scale=4.0,
+        use_discrete_timesteps=False,
+        use_timestep_transform=False,
+        **kwargs,
+    ):
+        self.num_sampling_steps = num_sampling_steps
+        self.num_timesteps = num_timesteps
+        self.cfg_scale = cfg_scale
+        self.use_discrete_timesteps = use_discrete_timesteps
+        self.use_timestep_transform = use_timestep_transform
+
+        self.scheduler = RFlowScheduler(
+            num_timesteps=num_timesteps,
+            num_sampling_steps=num_sampling_steps,
+            use_discrete_timesteps=use_discrete_timesteps,
+            use_timestep_transform=use_timestep_transform,
+            **kwargs,
+        )
+    
+    def sample(
+        self,
+        model,
+        text_encoder,
+        z, # z is the end state of the previous horizon
+        prompts,
+        device,
+        additional_args=None,
+        mask=None,
+        guidance_scale=None,
+        progress=True,
+        backprop_mode=None, # TODO: full backprop, this argument can be deleted
+        use_grad_checkpoint=False,
+    ):  # TODO:add arguments: 
+        # length: the length of horizon, which is the sampling steps in the horizon 
+        # start_sample_step/start_time_step: the starting step of the current horizon
+        def rollout(): #TODO: add arguments
+            pass
+        # if no specific guidance scale is provided, use the default scale when initializing the scheduler
+        if guidance_scale is None:
+            guidance_scale = self.cfg_scale
+
+        n = len(prompts)
+        # text encoding
+        model_args = text_encoder.encode(prompts)
+        y_null = text_encoder.null(n)
+        model_args["y"] = torch.cat([model_args["y"], y_null], 0)
+        if additional_args is not None:
+            model_args.update(additional_args)
+
+        # prepare timesteps
+        
+        timesteps = [(1.0 - i / self.num_sampling_steps) * self.num_timesteps for i in range(self.num_sampling_steps)]
+        if self.use_discrete_timesteps:
+            timesteps = [int(round(t)) for t in timesteps]
+        timesteps = [torch.tensor([t] * z.shape[0], device=device) for t in timesteps] # multiply the timesteps by batchsize
+        if self.use_timestep_transform:
+            timesteps = [timestep_transform(t, additional_args, num_timesteps=self.num_timesteps) for t in timesteps]
+        # TODO: slice the timesteps into sub-windows
+        if mask is not None:
+            noise_added = torch.zeros_like(mask, dtype=torch.bool)
+            noise_added = noise_added | (mask == 1)
+
+        progress_wrap = tqdm if progress else (lambda x: x)
+
+        # TODO: add "full"
+        if backprop_mode == 'last':
+            backprop_cutoff_idx = self.num_sampling_steps - 1
+        elif backprop_mode == 'rand':
+            backprop_cutoff_idx = random.randint(0, self.num_sampling_steps - 1)
+        elif backprop_mode == 'specific':
+            backprop_cutoff_idx = 15
+        elif backprop_mode == None:
+            backprop_cutoff_idx = self.num_sampling_steps + 1   # no vader backprop
+        else:
+            raise ValueError(f"Unknown backprop_mode: {backprop_mode}")
+
+        # TODO: for short horizon
+        # TODO: rollout() one horizon input/output
+        for i, t in progress_wrap(enumerate(timesteps)):
+            # TODO: backprop_mode set to "full"
+            if backprop_mode != None:   # if backprop_mode is None, no vader backprop, so it will not interfere with original opensora code
+                if i >= backprop_cutoff_idx:
+                    for name, param in model.named_parameters():
+                        if "lora" in name:
+                            param.requires_grad = True
+                else:
+                    model.requires_grad_(False)
+
+            # mask for adding noise
+            if mask is not None:
+                mask_t = mask * self.num_timesteps
+                x0 = z.clone()
+                x_noise = self.scheduler.add_noise(x0, torch.randn_like(x0), t)
+
+                mask_t_upper = mask_t >= t.unsqueeze(1)
+                model_args["x_mask"] = mask_t_upper.repeat(2, 1)
+                mask_add_noise = mask_t_upper & ~noise_added
+
+                z = torch.where(mask_add_noise[:, None, :, None, None], x_noise, x0)
+                noise_added = mask_t_upper
+
+            # classifier-free guidance
+            z_in = torch.cat([z, z], 0)
+            t = torch.cat([t, t], 0)
+            # apply gradient checkpointing to save memory during backpropagation
+            if use_grad_checkpoint:
+                pred = checkpoint.checkpoint(model, z_in, t, **model_args, use_reentrant=False).chunk(2, dim=1)[0]
+            else:
+                pred = model(z_in, t, **model_args).chunk(2, dim=1)[0]
+                
+            pred_cond, pred_uncond = pred.chunk(2, dim=0)
+            v_pred = pred_uncond + guidance_scale * (pred_cond - pred_uncond)
+
+            # update z
+            dt = timesteps[i] - timesteps[i + 1] if i < len(timesteps) - 1 else timesteps[i]
+            dt = dt / self.num_timesteps
+            z = z + v_pred * dt[:, None, None, None, None]
+
+            if mask is not None:
+                z = torch.where(mask_t_upper[:, None, :, None, None], z, x0)
+
+        return z
+
+    def training_losses(self, model, x_start, model_kwargs=None, noise=None, mask=None, weights=None, t=None):
+        return self.scheduler.training_losses(model, x_start, model_kwargs, noise, mask, weights, t)
